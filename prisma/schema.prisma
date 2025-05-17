@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id        Int         @id @default(autoincrement())
+  username  String      @unique
+  password  String
+  created_at DateTime @default(now())
+  userRoles UserRole[]
+}
+
+model Role {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  created_at DateTime @default(now())
+  userRoles UserRole[]
+roleMenus  Role_Menu[]  @relation("RoleToRoleMenus")
+}
+
+model UserRole {
+  id     Int   @id @default(autoincrement())
+  userId Int
+  roleId Int
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId])
+}
+
+model Menu {
+  id         Int          @id @default(autoincrement())
+  name       String
+  url        String
+  created_at DateTime     @default(now())
+
+  roleMenus  Role_Menu[]  @relation("MenuToRoleMenus")
+}
+model Role_Menu {
+  id         Int          @id @default(autoincrement())
+  id_role    Int
+  id_menu    Int
+  created_at DateTime     @default(now())
+
+  menu       Menu         @relation("MenuToRoleMenus", fields: [id_menu], references: [id])
+  role       Role         @relation("RoleToRoleMenus", fields: [id_role], references: [id])
+
+  @@unique([id_role, id_menu])
+}

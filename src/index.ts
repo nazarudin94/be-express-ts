@@ -1,0 +1,12 @@
+import express from "express";
+import userRouter from "./routes.ts/user"; // path disesuaikan
+
+const app = express();
+app.use(express.json());
+
+app.use("/users", userRouter); // router digunakan di path yang sesuai
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
