@@ -46,9 +46,20 @@ model Menu {
   id         Int          @id @default(autoincrement())
   name       String
   url        String
+  status      String
+  page        String
   created_at DateTime     @default(now())
-
+  menu_grup_id  Int
+  description String
+  menuGrup      MenuGrup @relation("GrupToMenus", fields: [menu_grup_id], references: [id])
   roleMenus  Role_Menu[]  @relation("MenuToRoleMenus")
+}
+model MenuGrup{
+   id         Int          @id @default(autoincrement())
+  name       String
+   created_at DateTime     @default(now())
+   menus      Menu[]  @relation("GrupToMenus")
+   
 }
 model Role_Menu {
   id         Int          @id @default(autoincrement())
