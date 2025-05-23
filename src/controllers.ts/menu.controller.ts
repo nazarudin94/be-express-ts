@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import menuModel from "../model.ts/menu.model";
+import menuModel from "../models.ts/menu.model";
 async function createMenu(req: Request, res: Response) {
   const { nama, url, page, status, menu_grup_id, description } = req.body;
   try {
