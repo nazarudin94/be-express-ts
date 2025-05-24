@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import menuModel from "../models.ts/menu.model";
 async function createMenu(req: Request, res: Response) {
-  const { nama, url, page, status, menu_grup_id, description } = req.body;
+  const { nama, url, page, status, menu_grup_id, description, roleId } =
+    req.body;
   try {
     const data = await menuModel.createMenu(
       nama,
@@ -9,7 +10,8 @@ async function createMenu(req: Request, res: Response) {
       page,
       status,
       menu_grup_id,
-      description
+      description,
+      roleId
     );
     res.status(201).json(data);
   } catch (error: any) {
@@ -18,7 +20,6 @@ async function createMenu(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 async function createMenuGrup(req: Request, res: Response) {
   const { nama } = req.body;
   try {
@@ -30,7 +31,6 @@ async function createMenuGrup(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 async function getMenu(req: Request, res: Response) {
   try {
     const data = await menuModel.getMenu();
@@ -41,7 +41,6 @@ async function getMenu(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 async function getMenuGrup(req: Request, res: Response) {
   try {
     const data = await menuModel.getMenuGrup();
@@ -64,7 +63,6 @@ async function getMenuById(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 async function deleteMenuById(req: Request, res: Response) {
   const { id } = req.params;
 
@@ -77,7 +75,6 @@ async function deleteMenuById(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 async function deleteGrupMenuById(req: Request, res: Response) {
   const { id } = req.params;
   try {
@@ -89,7 +86,6 @@ async function deleteGrupMenuById(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 async function getMenuGrupById(req: Request, res: Response) {
   const { id } = req.params;
 
@@ -102,7 +98,6 @@ async function getMenuGrupById(req: Request, res: Response) {
       .json({ message: "Internal server error", error: error.message });
   }
 }
-
 export const updateMenu = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const { name, url, status, page, menu_grup_id, description } = req.body;
@@ -124,7 +119,6 @@ export const updateMenu = async (req: Request, res: Response) => {
       .json({ message: "Gagal update menu", error: error.message });
   }
 };
-
 export const updateGrupMenu = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const { name } = req.body;
@@ -138,7 +132,6 @@ export const updateGrupMenu = async (req: Request, res: Response) => {
       .json({ message: "Gagal update grup menu", error: error.message });
   }
 };
-
 export default {
   createMenu,
   createMenuGrup,

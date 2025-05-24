@@ -1,23 +1,34 @@
 import prisma from "../../prisma/client";
 import { Prisma } from "@prisma/client";
 async function createMenu(
-  nama: string,
+  name: string,
   url: string,
   page: string,
   status: string,
   menu_grup_id: number,
-  description: string
+  description: string,
+  roleId: number
 ) {
+  // 1. Buat menu baru
   const newMenu = await prisma.menu.create({
     data: {
-      name: nama,
+      name,
       url,
       page,
       status,
       menu_grup_id,
       description,
-    } as Prisma.MenuUncheckedCreateInput,
+    },
   });
+
+  // 2. Buat role_menu secara otomatis
+  await prisma.role_Menu.create({
+    data: {
+      id_menu: newMenu.id,
+      id_role: roleId,
+    },
+  });
+
   return newMenu;
 }
 
@@ -58,6 +69,12 @@ async function getMenuById(id: number) {
 }
 
 async function deleteMenuById(id: number) {
+  // 1. Hapus semua role_menu terkait
+  await prisma.role_Menu.deleteMany({
+    where: {
+      id_menu: id,
+    },
+  });
   const deletedMenu = await prisma.menu.delete({
     where: {
       id: id,
